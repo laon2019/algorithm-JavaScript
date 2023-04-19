@@ -1,3 +1,4 @@
+//이진 변환 반복하기
 function solution(s) {
     let a = s;
     let count = 0;
