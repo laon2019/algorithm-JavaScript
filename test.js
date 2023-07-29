@@ -1,48 +1,25 @@
-function solution(fees, records) {
-  const time = new Map();
-  const order = [];
-
-  for (let i = 0; i < records.length; i++) {
-      const temp = records[i].split(" ");
-      if (temp[2] === "IN") {
-          if (time.has(Number(temp[1]))) {
-              time.set(Number(temp[1]), time.get(Number(temp[1])) + 1439 - changeTime(temp[0]));
-          } else {
-              time.set(Number(temp[1]), 1439 - changeTime(temp[0]));
-          }
-      } else {
-          time.set(Number(temp[1]), time.get(Number(temp[1])) - (1439 - changeTime(temp[0])));
-      }
-
-      if (!order.includes(Number(temp[1]))) order.push(Number(temp[1]));
-  }
-
-  order.sort((a, b) => a - b);
-
-  const answer = [];
-
-  for (let i = 0; i < order.length; i++) {
-      let stay = time.get(order[i]);
-      stay -= fees[0];
-
-      if (stay <= 0) {
-          answer.push(fees[1]);
-      } else {
-          let cost = fees[1];
-          while (stay > 0) {
-              stay -= fees[2];
-              cost += fees[3];
-          }
-          answer.push(cost);
-      }
-  }
-
-  return answer;
+const solution = (stones, k) => {
+    return BS(stones, k, 1, 200000000);
 }
 
-function changeTime(time) {
-  const temp = time.split(":");
-  const hour = parseInt(temp[0]) * 60;
-  const minute = parseInt(temp[1]);
-  return hour + minute;
+const BS = (list, k, min, max) => {
+    if (min === max) {
+        return min;
+    }
+    let mid = Math.round((min + max) / 2);
+    let count = 0;
+    
+    for (let i = 0 ; i < list.length ; i++) {
+        if (count === k) {
+			break;
+		}
+        let value = list[i]-(mid-1);
+        value <= 0 ? count++ : count = 0;
+    }
+    
+    if (count === k) {
+        return BS(list, k, min, mid-1);
+    }else {
+        return BS(list, k, mid, max);
+    }
 }
